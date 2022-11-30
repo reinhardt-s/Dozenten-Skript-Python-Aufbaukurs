@@ -30,6 +30,7 @@
   * `__init__`
   * `__des__`
   * `__name__`
+  * private variablen / felder
 * Vererbung
   * Schaubild 
   * main.py erklären

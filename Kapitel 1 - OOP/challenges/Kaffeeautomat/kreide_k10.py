@@ -2,7 +2,10 @@ from kreide_standard import AutomaticCoffeeBrewer
 
 
 class AutomaticCoffeeBrewerK10(AutomaticCoffeeBrewer):
-
+    """
+    Die ACB Kreide K10 erbt die Grundfunktionen der generischen ACB.
+    Sie hat jedoch für die meisten Ressourcen, ein größeres Fassungsvermögen.
+    """
     def __int__(self):
         self.name = "ACB Kreide 10"
         self._resources = {

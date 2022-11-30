@@ -1,20 +1,23 @@
-class ResourceObserver:
-
+class ResourceSubject:
+    """Wird einer Klasse vererbt, welche von Observer beobachtet werden soll."""
     def __init__(self):
         self._observer = []
-        print("RO init completed")
+        print("Subject initialisiert")
 
     def notify(self, modifier=None):
+        """Informiert bei aufruf alle registrierten Observer"""
         for observer in self._observer:
             if modifier != observer:
                 observer.update(self)
 
     def attach(self, observer):
+        """Registriert einen neuen Observer."""
         if observer not in self._observer:
             print(f"New subscriber detected: {observer.name}")
             self._observer.append(observer)
 
     def detach(self, observer):
+        """Entfernt einen Observer"""
         try:
             self._observer.remove(observer)
         except ValueError:
