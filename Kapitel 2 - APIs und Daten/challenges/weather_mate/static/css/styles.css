@@ -1,0 +1,33 @@
+* { box-sizing: border-box; }
+
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+}
+.autocomplete-items {
+  z-index: 99;
+  margin-top: 5px
+  /*position the autocomplete items to be the same width as the container:*/
+  position: fixed;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #fff;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  color: #fff;
+  background-color: #477BFF;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
