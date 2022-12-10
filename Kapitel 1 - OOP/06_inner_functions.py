@@ -27,11 +27,13 @@ def translate(lang: str):
     if lang == "english":
         return english
 
-    return "Translated"
+    return "Sprache nicht gefunden."
 
 
-# print(translate("english"))
-# print(translate("spanish"))
-# print(translate("german"))
-# call = translate("english")
-# print(call())
+print(translate("english"))
+print(translate("spanish"))
+
+print(translate("german"))
+
+call = translate("english")
+print(call())

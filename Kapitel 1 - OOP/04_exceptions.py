@@ -1,7 +1,7 @@
-file = open("none_existent_file.txt", mode="r")
-print(file.read())
-file.close()
-
+# file = open("none_existent_file.txt", mode="r")
+# print(file.read())
+# file.close()
+#
 # try:
 #     file = open("none_existent_file.txt", mode="r")
 #     print(file.read())
@@ -15,9 +15,9 @@ file.close()
 #     file.close()
 # except FileNotFoundError as fnf:
 #     print(f"Datei {fnf.filename} konnte nicht geladen werden")
-
-
-# class TooMuchChocolateError(Exception):
+#
+#
+# class TooMuchChocolateException(Exception):
 #     """Diese Ausnahme wird erzeugt, wenn CandyEater zu viel Schokolade gegessen hat"""
 #
 #     def __init__(self, bars_eaten):
@@ -26,7 +26,7 @@ file.close()
 #         super().__init__(self.message)
 #
 #
-# class NotEnoughWaterError(Exception):
+# class NotEnoughWaterException(Exception):
 #     """Diese Ausnahme wird erzeugt, wenn CandyEater vor dem Essen von Schokolade, nicht genug getrunken hat."""
 #
 #     def __init__(self, min_water):
@@ -44,9 +44,9 @@ file.close()
 #
 #     def eat_chocolate_bar(self):
 #         if self.chocolate_bars_eaten >= self.MAX_CHOCOLATE:
-#             raise TooMuchChocolateError(self.MAX_CHOCOLATE)
+#             raise TooMuchChocolateException(self.MAX_CHOCOLATE)
 #         elif self.water_sipped < self.MIN_WATER:
-#             raise NotEnoughWaterError(self.MIN_WATER)
+#             raise NotEnoughWaterException(self.MIN_WATER)
 #         else:
 #             self.chocolate_bars_eaten += 1
 #             self.water_sipped -= 1
@@ -56,13 +56,13 @@ file.close()
 # bob = CandyEater()
 # for _ in range(6):
 #     bob.eat_chocolate_bar()
-
+#
 # for i in range(7):
 #     try:
 #         print(f"{i} {bob.eat_chocolate_bar()}")
-#     except TooMuchChocolateError as chocolate:
+#     except TooMuchChocolateException as chocolate:
 #         print(f"{i} Verdaue Schokolade, da ich den Maximalwert von: {chocolate.bars_eaten}.")
-#     except NotEnoughWaterError as water:
+#     except NotEnoughWaterException as water:
 #         print(f"{i} Ich trinke erstmal Wasser bevor ich noch mehr Schokolade esse.")
 #         bob.water_sipped = 5
 #     # else:

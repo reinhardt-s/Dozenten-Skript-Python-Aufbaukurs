@@ -3,30 +3,28 @@ print(calc(5, 4))
 
 
 def how_many(text: str, symbol_1: str, symbol_2):
-    finder = lambda l_text, symbol: l_text.count(symbol)
+    finder = lambda l_text, symbol: l_text.lower().count(symbol)
 
     print(finder(text, symbol_1))
     print(finder(text, symbol_2))
 
 
-def extract(file_1, file_2):
-    beautify = lambda l_html: l_html.replace("_", " ")[:-4].title()
-    # def b(l_html): return l_html.replace("_", " ")[:-4].title()
+how_many('“First, solve the problem. Then, write the code.” – John Johnson', 'j', 'o')
 
-    print(beautify(file_1))
-    print(beautify(file_2))
-    # print(b(file_1))
-    # print(b(file_2))
 
 # https://www.flake8rules.com/rules/E731.html
-def at_twelve(text):
-    twelve = lambda at: at[12]
-    def a_t(t): return t[12]
-    print(a_t(text))
-    print(twelve(text))
+# https://peps.python.org/pep-0008/#programming-recommendations
+# Correct:
+def def_f(x): return 2 ** x
 
 
-how_many("my name is bob", "b", "e")
-extract("my_filename.txt", "orders.sql")
-at_twelve("My name is earl")
-at_twelve("I am Groot")
+# Wrong:
+lambda_f = lambda x: 2 ** x
+
+
+def calculate(x, calculate):
+    print(calculate(x))
+
+
+calculate(4, lambda_f)
+calculate(4, def_f)

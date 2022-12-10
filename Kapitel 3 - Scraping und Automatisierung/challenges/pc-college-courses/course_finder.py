@@ -60,5 +60,6 @@ for count, page in enumerate(element_list, start=1):
         break
 
 course_list.sort()
+print(course_list)
 print(f'Günstigste Kurs: {course_list[0].name}')
 print(f'Teuerste Kurs: {course_list[-1].name}')

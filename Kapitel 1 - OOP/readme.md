@@ -5,12 +5,10 @@
 * Klassen
 * Vererbung
 * `__init__`
-* `__des__`
+* `__del__`
 * `__name__`
-* Logging
-* progressbar2
 * Design Patterns
-  * Interface
+  * Interface - duck-typing
   * Singleton - pfui -> Module
   * Observer
 * Exceptions
@@ -21,25 +19,24 @@
 
 ## Ablauf
 * Was ist objektorientierte Programmierung
-* Logging
-  * import
-  * erste Ausgaben
-  * Stream Handler
-* Klassen -> in main.py erstellen
+* Klassen -> 01_classes_and_inheritance
   * class
+  * Default Werte
+  * Typen
   * `__init__`
-  * `__des__`
+  * `__del__`
   * `__name__`
-  * private variablen / felder
 * Vererbung
   * Schaubild 
   * main.py erklären
   * 01_inheritance
 * Interface
+  * https://docs.python.org/3/library/abc.html
   * Abstract Methoden
-    * Definiert Methode, implementiert diese jedoch nicht
+    * Deklariert Methode, implementiert diese jedoch nicht
     * `pass`
     * 02 interface
+    * https://youtrack.jetbrains.com/issue/PY-16132
 * Observer
   * Schaubild
   * 03 observer
@@ -55,3 +52,6 @@
 * Decorators
   * 07 decorators
 * Der Kaffee-Automat
+* Dokumentation
+  * python -m pydoc -p 8080
+  * python -m pydoc -w filename

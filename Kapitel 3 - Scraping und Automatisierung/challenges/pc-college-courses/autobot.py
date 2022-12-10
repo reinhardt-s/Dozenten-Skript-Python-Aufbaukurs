@@ -3,6 +3,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webelement import WebElement
 
+
 class AutoBot:
     def __init__(self, headless=False):
         options = Options()
