@@ -1,5 +1,0 @@
-Turn left
-Turn right
-Drive
-Rückgabe
-Rückgabe

@@ -1,14 +1,16 @@
-import sqlite3
 import uuid
 
 from flask import Flask, request
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
-from database_02 import Database
+
+from database_01 import Database
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 
+
+# start up config
 attendees = {
     "1d38e455759a11eda3e394de807959fa": {'name': 'James Dean', 'skill_level': 'expert'}
 }
@@ -18,6 +20,7 @@ users = {
     "susan": generate_password_hash("sanders")
 }
 
+# db based config
 user_db = Database()
 users_rows = user_db.read_all_rows('SELECT name, password from users')
 
@@ -33,17 +36,26 @@ def verify_password(username, password):
 # read one
 @app.route('/<attendee_id>', methods=['GET'])
 def get(attendee_id):
+
+    # startup config
+    return attendees[attendee_id]
+
+    # db config
     # threaded
-    db = Database()
-    return db.read_one_row(f'SELECT * from attendees where attendee_id = ?', (attendee_id,))
+    # db = Database()
+    # return db.read_one_row(f'SELECT * from attendees where attendee_id = ?', (attendee_id,))
 
 
 # read all
 @app.route('/', methods=['GET'])
 def get_all():
+    # startup config
+    attendees_list = attendees
+
+    # db config
     # threaded
-    db = Database()
-    attendees_list = db.read_all_rows(f'SELECT * from attendees')
+    # db = Database()
+    # attendees_list = db.read_all_rows(f'SELECT * from attendees')
     return {'attendees': attendees_list}
 
 
@@ -51,22 +63,29 @@ def get_all():
 @app.route('/', methods=['POST'])
 def post():
     attendee_id = uuid.uuid1().hex
-    # attendees[attendee_id] = request.json
-    attendee = request.json
-    db = Database()
-    db.change('INSERT INTO attendees VALUES (?, ?, ?)', (attendee_id, attendee['name'], attendee['skill_level']))
 
-    return {'attendee_id': attendee_id}, 201
+    # start up config
+    attendees[attendee_id] = request.json
+
+    # db config
+    # attendee = request.json
+    # db = Database()
+    # db.change('INSERT INTO attendees VALUES (?, ?, ?)', (attendee_id, attendee['name'], attendee['skill_level']))
+
+    return {'attendee_id': attendee_id}
 
 
 # update
 @app.route('/<attendee_id>', methods=['PUT'])
 def put(attendee_id):
-    # attendees[attendee_id] = request.json
-    attendee = request.json
-    db = Database()
-    db.change("UPDATE attendees SET name = ?, skill_level = ?  WHERE attendee_id = ?",
-              (attendee['name'], attendee['skill_level'], attendee_id))
+    # startup config
+    attendees[attendee_id] = request.json
+
+    # db config
+    # attendee = request.json
+    # db = Database()
+    # db.change("UPDATE attendees SET name = ?, skill_level = ?  WHERE attendee_id = ?",
+    #           (attendee['name'], attendee['skill_level'], attendee_id))
     return {'attendee_id': attendee_id}
 
 
@@ -74,10 +93,12 @@ def put(attendee_id):
 @auth.login_required
 @app.route('/<attendee_id>', methods=['DELETE'])
 def delete(attendee_id):
-    # result = attendees.pop(attendee_id, 404)
-    db = Database()
-    db.change("DELETE FROM attendees WHERE attendee_id = ?",
-              (attendee_id,))
+    # startup config
+    result = attendees.pop(attendee_id, 404)
+    # db config
+    # db = Database()
+    # db.change("DELETE FROM attendees WHERE attendee_id = ?",
+    #           (attendee_id,))
     return {'attendee_id': attendee_id}
 
 

@@ -1,8 +1,12 @@
+from .log import log
+
+
 class ResourceSubject:
     """Wird einer Klasse vererbt, welche von Observer beobachtet werden soll."""
+
     def __init__(self):
         self._observer = []
-        print("Subject initialisiert")
+        log.debug("Subject initialisiert")
 
     def notify(self, modifier=None):
         """Informiert bei aufruf alle registrierten Observer"""
@@ -13,7 +17,7 @@ class ResourceSubject:
     def attach(self, observer):
         """Registriert einen neuen Observer."""
         if observer not in self._observer:
-            print(f"New subscriber detected: {observer.name}")
+            log.info(f"New subscriber detected: {observer.name}")
             self._observer.append(observer)
 
     def detach(self, observer):
@@ -21,4 +25,4 @@ class ResourceSubject:
         try:
             self._observer.remove(observer)
         except ValueError:
-            print(f"Observer konnte nicht {observer} konnte nicht entfernt werden.")
+            log.info(f"Observer konnte nicht {observer} konnte nicht entfernt werden.")

@@ -1,5 +1,3 @@
-import sys
-
 from kreide_k10 import AutomaticCoffeeBrewerK10
 
 k10 = AutomaticCoffeeBrewerK10()
