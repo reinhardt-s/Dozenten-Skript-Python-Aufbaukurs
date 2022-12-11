@@ -1,6 +1,6 @@
 import uuid
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, url_for
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import check_password_hash
 
@@ -22,9 +22,15 @@ def verify_password(username, password):
         return username
 
 
-@app.route("/", methods=['GET'])
+@app.route("/", methods=['GET', 'POST'])
 def index():
     db = Database()
+
+    if request.method == 'POST':
+        rumor_id = uuid.uuid1().hex
+        db.change('INSERT INTO rumors VALUES (?, ?, ?, ?, ?)',
+                  (rumor_id, request.form['new_rumor'], 0, 0, request.form['username']))
+
     rumors = db.read_all_rows(f'SELECT * from rumors order by rowid desc')
     return render_template("index.html", rumors=rumors)
 
@@ -44,29 +50,31 @@ def get_all():
     return {'rumors': rumors_list}
 
 
-# create
-@app.route('/', methods=['POST'])
-def post():
-    rumor_id = uuid.uuid1().hex
-    db = Database()
-    form = request.form
-    print(form)
-    db.change('INSERT INTO rumors VALUES (?, ?, ?, ?, ?)',
-              (rumor_id, request.form['new_rumor'], 0, 0, request.form['username']))
-
-    db = Database()
-    rumors = db.read_all_rows(f'SELECT * from rumors order by rowid desc')
-    return render_template("index.html", rumors=rumors)
-
-
 # update
-@app.route('/<rumor_id>', methods=['PUT'])
-def put(rumor_id):
-    rumor = request.json
+# @app.route('/<rumor_id>', methods=['PUT'])
+# def put(rumor_id):
+#     rumor = request.json
+#     db = Database()
+#     db.change("UPDATE rumors SET name = ?, skill_level = ?  WHERE rumor_id = ?",
+#               (rumor['name'], rumor['skill_level'], rumor_id))
+#     return {'rumor_id': rumor_id}
+
+@app.route('/spread/<rumor_id>', methods=['PUT'])
+def put_spread(rumor_id):
     db = Database()
-    db.change("UPDATE rumors SET name = ?, skill_level = ?  WHERE rumor_id = ?",
-              (rumor['name'], rumor['skill_level'], rumor_id))
-    return {'rumor_id': rumor_id}
+    rumor = db.read_one_row(f'SELECT * from rumors where rumor_id = ?', (rumor_id,))
+    db.change("UPDATE rumors SET propagated = ? WHERE rumor_id = ?",
+              (rumor['propagated'] + 1, rumor_id))
+    return {'propagated': rumor['propagated'] + 1}
+
+
+@app.route('/love/<rumor_id>', methods=['PUT'])
+def put_love(rumor_id):
+    db = Database()
+    rumor = db.read_one_row(f'SELECT * from rumors where rumor_id = ?', (rumor_id,))
+    db.change("UPDATE rumors SET loved = ? WHERE rumor_id = ?",
+              (rumor['loved'] + 1, rumor_id))
+    return {'loved': rumor['loved'] + 1}
 
 
 # delete
