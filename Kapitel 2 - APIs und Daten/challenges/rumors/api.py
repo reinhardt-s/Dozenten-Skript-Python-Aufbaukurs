@@ -13,7 +13,10 @@ auth = HTTPBasicAuth()
 user_db = Database()
 users_rows = user_db.read_all_rows('SELECT name, password from users')
 
-user_list = dict((username, password) for username, password in users_rows)
+user_list = dict()
+
+for user in users_rows:
+    user_list[user['name']] = user['password']
 
 
 @auth.verify_password
@@ -51,13 +54,14 @@ def get_all():
 
 
 # update
-# @app.route('/<rumor_id>', methods=['PUT'])
-# def put(rumor_id):
-#     rumor = request.json
-#     db = Database()
-#     db.change("UPDATE rumors SET name = ?, skill_level = ?  WHERE rumor_id = ?",
-#               (rumor['name'], rumor['skill_level'], rumor_id))
-#     return {'rumor_id': rumor_id}
+@app.route('/<rumor_id>', methods=['PUT'])
+def put(rumor_id):
+    rumor = request.json
+    db = Database()
+    db.change("UPDATE rumors SET name = ?, skill_level = ?  WHERE rumor_id = ?",
+              (rumor['name'], rumor['skill_level'], rumor_id))
+    return {'rumor_id': rumor_id}
+
 
 @app.route('/spread/<rumor_id>', methods=['PUT'])
 def put_spread(rumor_id):
@@ -78,8 +82,8 @@ def put_love(rumor_id):
 
 
 # delete
-@auth.login_required
 @app.route('/<rumor_id>', methods=['DELETE'])
+@auth.login_required
 def delete(rumor_id):
     db = Database()
     db.change("DELETE FROM rumors WHERE rumor_id = ?",

@@ -54,4 +54,3 @@
 * Der Kaffee-Automat
 * Dokumentation
   * python -m pydoc -p 8080
-  * python -m pydoc -w filename

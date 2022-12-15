@@ -33,16 +33,15 @@ class Vehicle:
         print(f"Lenke nach {direction}")
 
 
-# Erbung von Klasse Vehicle und Interface AccelerationInterface
+# Erbet von Klasse Vehicle und Interface AccelerationInterface
 class Car(Vehicle, AccelerationInterface):
     """
     Car definiert vollumfänglich die Funktionen eines Autos.
     """
 
     def __init__(self):
-        super().__init__()
+        super().__init__(speed='150/kmh')
         self.doors = 5
-        # self.speed = "150 km/h"
         print("Auto initialisiert")
 
     # Implementierung des Interfaces
@@ -68,16 +67,16 @@ class Turtle(AccelerationInterface):
 class Bicycle(Vehicle, AccelerationInterface):
     """Ein manuelles Motorrad."""
 
+    def __init__(self):
+        super().__init__(speed='20 km/h')
+        self.doors = 0
+        print("Fahrrad initialisiert")
 
-def __init__(self):
-    super().__init__()
-    self.doors = 0
-    # self.speed = "20 km/h"
-    print("Fahrrad initialisiert")
+    def accelerate(self) -> str:
+        return "Trete in die Pedale"
 
-
-def accelerate(self) -> str:
-    return "Trete in die Pedale"
+    def get_max_speed(self) -> int:
+        return 150
 
 
 class Quad(Vehicle, AccelerationInterface):
@@ -85,12 +84,16 @@ class Quad(Vehicle, AccelerationInterface):
     Ein Auto ohne Türen.
     """
 
+    def __init__(self):
+        super().__init__('70 km/h')
+        self.doors = 0
+        print("Quad initialisiert")
 
-def __init__(self):
-    super().__init__()
-    self.doors = 0
-    self.speed = "70 km/h"
-    print("Quad initialisiert")
+    def accelerate(self) -> str:
+        return 'Beschleunige'
+
+    def get_max_speed(self) -> int:
+        return 75
 
 
 bmw = Car()

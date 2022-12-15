@@ -47,6 +47,12 @@ recommendations_as_classes = []
 for bar in bars:
     as_list = bar.text.split('\n')
     recommendations.append(dict(zip(['name', 'rating', 'type', 'location', 'opens', 'style'], as_list)))
+
+    # Abhängig von der Uhrzeit wird bei Google. ggf. keine Öffnungszeit angegeben
+    if len(as_list) < 6:
+        as_list.append(as_list[4])
+        as_list[4] = 'unbekannt'
+
     recommendations_as_classes.append(
         Bar(name=as_list[0], rating=float(as_list[1].replace(',', '.')), type=as_list[2], location=as_list[3],
             opens=as_list[4], style=as_list[5]))

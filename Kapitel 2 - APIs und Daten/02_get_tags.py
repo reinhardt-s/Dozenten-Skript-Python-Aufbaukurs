@@ -1,4 +1,3 @@
-# https://de.wikipedia.org/wiki/Liste_der_Pok%C3%A9mon
 import re
 
 import requests

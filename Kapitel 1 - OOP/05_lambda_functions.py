@@ -23,6 +23,9 @@ lambda_f = lambda x: 2 ** x
 
 
 def calculate(x, calculate):
+    # Setzt Euch auf Zeile 29 den Breakpoint
+    # und schaut Euch im Debugger den Namen der
+    # Übergebenen Funktion an.
     print(calculate(x))
 
 

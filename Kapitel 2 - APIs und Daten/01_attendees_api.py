@@ -24,7 +24,10 @@ users = {
 user_db = Database()
 users_rows = user_db.read_all_rows('SELECT name, password from users')
 
-user_list = dict((username, password) for username, password in users_rows)
+user_list = dict()
+
+for user in users_rows:
+    user_list[user['name']] = user['password']
 
 
 @auth.verify_password
@@ -90,8 +93,8 @@ def put(attendee_id):
 
 
 # delete
-@auth.login_required
 @app.route('/<attendee_id>', methods=['DELETE'])
+@auth.login_required
 def delete(attendee_id):
     # startup config
     result = attendees.pop(attendee_id, 404)

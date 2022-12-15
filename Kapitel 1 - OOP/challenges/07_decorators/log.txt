@@ -1,0 +1,9 @@
+Meine Nachricht
+Von: add_article_to_bill: Füge Artikel hinzu.
+Kosten: 14.5
+Von: add_article_to_bill: Füge Artikel hinzu.
+Kosten: 32.6
+Von: add_article_to_bill: Füge Artikel hinzu.
+Kosten: 14.33
+Von: add_tax: Füge Steuern hinzu.
+Kosten: 61.43
