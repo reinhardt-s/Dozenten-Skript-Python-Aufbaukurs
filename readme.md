@@ -1,5 +1,5 @@
 # Hinweis zur Benutzung
-Teiles des Skriptes benutzen Module, die wir während des Seminars installiert haben.
+Teiles des Skriptes benutzt Module, die wir während des Seminars installiert haben.
 Diese müssen in der entsprechenden Version zur Verfügung stehen.
 
 Diese Abhängigkeiten findet ihr in der `requirements.txt`:
