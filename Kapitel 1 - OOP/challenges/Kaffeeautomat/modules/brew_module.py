@@ -18,13 +18,13 @@ class BrewModule(ResourceObserver):
         """Brüht den Kaffee. Die Brühzeit richtet sich ausschließlich nach der Menge des eingesetzten Wassers."""
 
         # Zeige auf dem Display an, welches Getränk zubereitet wird
-        self.__display.show(f"Brühe {beverage}")
+        self.__display.show(f'Brühe {beverage}')
 
         # Zeige auf dem Display an, wie weit das Getränk ist
-        for ml in range(recipe["water"]):
+        for ml in range(recipe['water']):
             time.sleep(0.01)
             self.__display.show_progress(ml, recipe['water'])
-        self.__display.show(f"Ihr {beverage} ist fertig!")
+        self.__display.show(f'Ihr {beverage} ist fertig!')
         # Vermerke in der Datenbank, dass dieses Getränk gebrüht wurde.
         self.add_beverage(beverage)
 
