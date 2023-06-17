@@ -3,7 +3,7 @@ import sqlite3
 
 class Database:
     def __init__(self):
-        self.db = sqlite3.connect("attendees.db")
+        self.db = sqlite3.connect("chappy.db")
         self.db.row_factory = sqlite3.Row
         print("DB connection initialized")
 

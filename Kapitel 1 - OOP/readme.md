@@ -52,5 +52,3 @@
 * Decorators
   * 07 decorators
 * Der Kaffee-Automat
-* Dokumentation
-  * python -m pydoc -p 8080
