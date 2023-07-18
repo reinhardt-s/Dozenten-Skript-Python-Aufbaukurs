@@ -3,6 +3,12 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 
 
+
+from pydantic import BaseModel
+from typing import List, Dict
+from datetime import datetime
+
+
 class Parameters(BaseModel):
     name: str
     unit: str
@@ -37,8 +43,10 @@ class WeatherData(BaseModel):
 
     @staticmethod
     def from_json(json):
-        return WeatherData(media_type=json['media_type'],
-                           type=json['type'],
-                           version=json['version'],
-                           timestamps=json['timestamps'],
-                           features=json['features'])
+        return WeatherData(
+            media_type=json['media_type'],
+            type=json['type'],
+            version=json['version'],
+            timestamps=json['timestamps'],
+            features=json['features']
+        )

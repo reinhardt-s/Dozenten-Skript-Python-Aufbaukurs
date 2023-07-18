@@ -2,22 +2,23 @@ from enum import Enum
 
 
 class Direction(Enum):
-    FORWARD = 1
-    BACKWARD = 2
-    LEFT = 3
-    RIGHT = 4
+    FORWARD = "vorwärts"
+    BACKWARD = "zurück"
+    LEFT = "links"
+    RIGHT = "rechts"
 
 
-user_input = int(input("In welche Richtung soll ich gehen?\n"))
-user_direction = Direction(user_input)
+def main():
+    """
+    Asks the user for a direction and prints the corresponding message.
+    """
+    user_input = input("In welche Richtung soll ich gehen?\n")
+    try:
+        user_direction = Direction[user_input.upper()]
+        print(f"Laufe nach {user_direction.value}")
+    except KeyError:
+        print("Damit kann ich nichts anfangen.")
 
-if user_direction == Direction.RIGHT:
-    print("Laufe nach rechts")
-elif user_direction == Direction.LEFT:
-    print("Laufe nach link")
-elif user_direction == Direction.FORWARD:
-    print("Laufe vorwärts")
-elif user_direction == Direction.BACKWARD:
-    print("Laufe zurück")
-else:
-    print("Damit kann ich nichts anfangen.")
+
+if __name__ == "__main__":
+    main()

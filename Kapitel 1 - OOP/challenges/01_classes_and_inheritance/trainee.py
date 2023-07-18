@@ -1,29 +1,37 @@
 class Trainee:
     """
-    Diese Klasse repräsentiert eine Schüler*in mit Namen, Kurs und Fähigkeiten
+    Represents a trainee with a name, course, and skill points.
     """
 
-    def __init__(self, name: str, course: str, skill_points=14):
-        print("Initialisiere Trainee")
+    def __init__(self, name: str, course: str, skill_points: int = 14) -> None:
+        """
+        Initializes a Trainee object with a name, course, and skill points.
+        :param name: The name of the trainee.
+        :param course: The course the trainee is taking.
+        :param skill_points: The number of skill points the trainee has (default is 14).
+        """
         self.name = name
         self.course = course
         self.skill_points = skill_points
 
-    def who_am_i(self) -> str:
+    def __str__(self) -> str:
         """
-        Beschreibt den Trainee in einem String
-        :return: Gibt einen String aus, welcher name, course und skill_level beinhaltet
+        Returns a string representation of the Trainee object.
+        :return: A string containing the trainee's name, course, and skill points.
         """
-        return f'Name: {self.name}\nKurs: {self.course}\nSkill: {str(self.skill_points)}'
+        return f"Name: {self.name}\nKurs: {self.course}\nSkill: {self.skill_points}"
 
     def add_skill_points(self, quantity: int) -> int:
         """
-        Erhöht den Skill des Trainees um quantity
-        :param quantity: Anzahl der hinzuzufügenden Skillpunkte
-        :return: Gibt den neuen Wert an Skillpunkten zurück
+        Increases the trainee's skill points by the given quantity.
+        :param quantity: The number of skill points to add.
+        :return: The new total number of skill points.
         """
         self.skill_points += quantity
         return self.skill_points
 
-    def __del__(self):
-        print("Objekt wird zerstört")
+    def __del__(self) -> None:
+        """
+        Destroys the Trainee object.
+        """
+        pass

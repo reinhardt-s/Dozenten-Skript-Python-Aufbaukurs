@@ -1,16 +1,14 @@
-import bcrypt as bcrypt
+import bcrypt
 import uvicorn
-import yaml
 from fastapi import Depends, FastAPI, HTTPException, status, Response
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-
-from database_01 import Database
+import asyncpg
 
 
 class Attendee(BaseModel):
-    id: str | None = None
+    id: str = None
     name: str
     skill_level: str
 
@@ -44,7 +42,11 @@ users = {
 }
 
 
-def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
+async def get_pool():
+    return await asyncpg.create_pool(dsn='postgresql://user:password@localhost/dbname')
+
+
+async def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
     if credentials.username in users:
         hashed_password = users[credentials.username]
         if bcrypt.checkpw(credentials.password.encode('utf-8'), hashed_password):
@@ -64,14 +66,10 @@ async def read_current_user(username: str = Depends(get_current_username)):
 
 @app.get('/')
 async def get_all():
-    # startup config
-    attendees_list = attendees
-
-    # db config
-    # threaded
-    db = Database()
-    attendees_list = db.read_all_rows(f'SELECT * from attendees')
-    return {'attendees': attendees_list}
+    async with get_pool() as pool:
+        async with pool.acquire() as conn:
+            attendees_list = await conn.fetch('SELECT * from attendees')
+    return {'attendees': [dict(row) for row in attendees_list]}
 
 
 @app.get('/attendee/{attendee_id}',
@@ -79,14 +77,13 @@ async def get_all():
          responses={
              404: {"description": "The item was not found"},
          })
-async def get(attendee_id, as_yaml: bool = False):
-    # db config
-    # threaded
-    db = Database()
-    attendee = db.read_one_row(f'SELECT * from attendees where attendee_id = ?', (attendee_id,))
+async def get(attendee_id: str, as_yaml: bool = False):
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        attendee = await conn.fetchrow('SELECT * from attendees where attendee_id = $1', attendee_id)
     if attendee is None:
         return JSONResponse(status_code=404, content={"message": "Item not found"})
-    attendee = Attendee.from_json(attendee)
+    attendee = Attendee.from_json(dict(attendee))
     print(
         attendee.to_yaml()
     )
@@ -95,29 +92,27 @@ async def get(attendee_id, as_yaml: bool = False):
 
 @app.post('/attendee/', status_code=201)
 async def post(attendee: Attendee):
-    # db config
-
-    db = Database()
-    db.change('INSERT INTO attendees VALUES (?, ?, ?)', (attendee.id, attendee.name, attendee.skill_level))
+    async with await get_pool() as pool:
+        async with pool.acquire() as conn:
+            await conn.execute('INSERT INTO attendees VALUES ($1, $2, $3)', attendee.id, attendee.name, attendee.skill_level)
 
     return attendee.to_json()
 
 
 @app.put('/attendee/{attendee_id}')
-async def put(attendee_id, attendee: Attendee):
-    # db config
-    db = Database()
-    db.change("UPDATE attendees SET name = ?, skill_level = ?  WHERE attendee_id = ?",
-              (attendee.name, attendee.skill_level, attendee_id))
+async def put(attendee_id: str, attendee: Attendee):
+    async with await get_pool() as pool:
+        async with pool.acquire() as conn:
+            await conn.execute("UPDATE attendees SET name = $1, skill_level = $2 WHERE attendee_id = $3",
+                                attendee.name, attendee.skill_level, attendee_id)
     return attendee.to_json()
 
 
 @app.delete('/attendee/{attendee_id}')
-async def delete(attendee_id):
-
-    db = Database()
-    db.change("DELETE FROM attendees WHERE attendee_id = ?",
-              (attendee_id,))
+async def delete(attendee_id: str):
+    async with await get_pool() as pool:
+        async with pool.acquire() as conn:
+            await conn.execute("DELETE FROM attendees WHERE attendee_id = $1", attendee_id)
     return {'attendee_id': attendee_id}
 
 

@@ -12,15 +12,24 @@ from person import Person
 from parent import Parent
 
 
-alex = Person('Alex')
-riley = Person('Riley')
-hank = Parent('Hank')
+def main():
+    # create instances of Person and Parent classes
+    alex = Person('Alex')
+    riley = Person('Riley')
+    hank = Parent('Hank')
 
-alex.add_to_grocery_list("Mehl")
-alex.add_to_grocery_list("Eier")
-hank.add_to_grocery_list("Badesalz")
-riley.add_to_grocery_list("Gurken")
-riley.add_to_grocery_list("Knabberzeugs")
-riley.add_to_grocery_list("Kaffee")
+    # add items to grocery list
+    alex.add_to_grocery_list("Mehl")
+    alex.add_to_grocery_list("Eier")
+    hank.add_to_grocery_list("Badesalz")
+    riley.add_to_grocery_list("Gurken")
+    riley.add_to_grocery_list("Knabberzeugs")
+    riley.add_to_grocery_list("Kaffee")
 
-print(riley.get_grocery_list())
+    # print grocery list
+    print(riley.grocery_list())
+
+
+if __name__ == '__main__':
+    main()
+

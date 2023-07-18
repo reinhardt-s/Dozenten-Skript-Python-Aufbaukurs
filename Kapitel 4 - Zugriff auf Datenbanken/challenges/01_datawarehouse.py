@@ -46,79 +46,73 @@
 # Herstellen der Verbindung zur Datenbank
 import sqlite3
 
-
-
-
 def create_table(table, columns, cursor):
-    # Erstellen einer Tabelle mit dem Namen warehouse
-    if cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None:
-        # Tabelle löschen, falls sie bereits existiert
-        cursor.execute(f"DROP TABLE {table}", )
+    """
+    Create a table with the given name and columns using the given cursor.
+    If the table already exists, it will be dropped and recreated.
+    """
+    cursor.execute(f"DROP TABLE IF EXISTS {table}")
     cursor.execute(f"CREATE TABLE {table} ({columns})")
-    connection.commit()
 
+def insert_data(table, data, cursor):
+    """
+    Insert data into the given table using the given cursor.
+    """
+    cursor.executemany(f"INSERT INTO {table} VALUES ({','.join(['?']*len(data[0]))})", data)
 
-# Verbindung zur Datenbank herstellen
+# Establish a connection to the database
 connection = sqlite3.connect("erm.db")
 connection.row_factory = sqlite3.Row
 
-# Erstellen eines Cursors
-# Ein Cursor ist ein Objekt, das die Kommunikation mit der Datenbank verwaltet.
-# Mit dem Cursor können Sie SQL-Anweisungen ausführen.
-
+# Create a cursor to execute SQL statements
 cursor = connection.cursor()
 
-create_table("warehouse", "id INTEGER PRIMARY KEY, product TEXT, amount INTEGER, price REAL, reorder_level INTEGER"
-             , cursor)
-create_table("sales", "id INTEGER PRIMARY KEY, product INTEGER, amount INTEGER, price REAL, customer INTEGER, date TEXT"
-             , cursor)
-create_table("customer", "id INTEGER PRIMARY KEY, name TEXT, address TEXT, city TEXT, country TEXT"
-             , cursor)
+# Create the tables
+create_table("warehouse", "id INTEGER PRIMARY KEY, product TEXT, amount INTEGER, price REAL, reorder_level INTEGER", cursor)
+create_table("sales", "id INTEGER PRIMARY KEY, product INTEGER, amount INTEGER, price REAL, customer INTEGER, date TEXT", cursor)
+create_table("customer", "id INTEGER PRIMARY KEY, name TEXT, address TEXT, city TEXT, country TEXT", cursor)
 
-# Daten in die Tabelle warehouse einfügen
-tuple_list_of_warehouse = [
+# Insert data into the tables
+insert_data("warehouse", [
     ('Schraube 3x30 metrisch', 312, 0.17, 50),
     ('Stahlplatte 5000x2000x5', 15, 2494, 7),
     ('Drallrohr', 40, 4994, 10)
-]
-cursor.executemany(
-    "INSERT INTO warehouse (product, amount, price, reorder_level) VALUES ( ?, ?, ?, ?)", tuple_list_of_warehouse)
-tuple_list_of_customer = [
+], cursor)
+
+insert_data("customer", [
     ('Müller GmbH', 'Hauptstraße 1', 'Berlin', 'Deutschland'),
     ('Schmidt KG', 'Hauptstraße 2', 'Wien', 'Österreich'),
     ('Meyer AG', 'Hauptstraße 3', 'Zürich', 'Schweiz')
-]
-cursor.executemany(
-    "INSERT INTO customer (name, address, city, country) VALUES ( ?, ?, ?, ?)", tuple_list_of_customer)
+], cursor)
 
-
-tuple_list_of_sales = [
+insert_data("sales", [
     (1, 100, 0.17, 1, '2023-01-01'),
     (3, 1, 2494, 2, '2023-01-01'),
     (3, 1, 4994, 3, '2023-01-01'),
     (1, 100, 0.17, 1, '2023-01-02'),
     (1, 1200, 0.32, 2, '2023-01-02'),
     (3, 1, 4994, 3, '2023-01-02')
-]
-cursor.executemany(
-    "INSERT INTO sales (product, amount, price, customer, date) VALUES (?, ?, ?, ?, ?)", tuple_list_of_sales)
-connection.commit()
+], cursor)
 
-# Bsp um left join erweitern
-cursor.execute(
-    "SELECT sales.amount, sales.price, sales.product, "
-    "customer.name as customer_name, "
-    "warehouse.product as product_name FROM warehouse JOIN sales ON warehouse.id = sales.product "
-    "JOIN customer ON sales.customer = customer.id")
+# Retrieve all products sold to Schmidt KG
+cursor.execute("""
+    SELECT sales.amount, sales.price, warehouse.product as product_name
+    FROM sales
+    JOIN warehouse ON sales.product = warehouse.id
+    JOIN customer ON sales.customer = customer.id
+    WHERE customer.name = 'Schmidt KG'
+""")
 rows = cursor.fetchall()
 
-list_of_sold_products = [dict(zip(row.keys(), row)) for row in rows]
-
+# Print the results
 total_price = 0
-for product in list_of_sold_products:
-    total_price += product["price"] * product["amount"]
+for row in rows:
+    amount, price, product_name = row
+    total_price += price * amount
+    print(f"{amount} x {product_name} @ {price} €")
 
+print(f"Total price: {total_price} €")
 
-for product in list_of_sold_products:
-    print(product)
-print(f"Total price: {total_price}")
+# Commit the changes to the database and close the connection
+connection.commit()
+connection.close()

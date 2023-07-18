@@ -17,28 +17,30 @@
 #     print(f"Datei {fnf.filename} konnte nicht geladen werden")
 #
 #
+
 class TooMuchChocolateException(Exception):
-    """Diese Ausnahme wird erzeugt, wenn CandyEater zu viel Schokolade gegessen hat"""
+    """Raised when CandyEater has eaten too much chocolate"""
 
     def __init__(self, bars_eaten):
         self.bars_eaten = bars_eaten
-        self.message = f"Zu viel Schokolade gegessen! Kann nicht mehr als {bars_eaten} Schokoladen essen!"
+        self.message = f"Too much chocolate! Cannot eat more than {bars_eaten} chocolate bars!"
         super().__init__(self.message)
 
 
 class NotEnoughWaterException(Exception):
-    """Diese Ausnahme wird erzeugt, wenn CandyEater vor dem Essen von Schokolade, nicht genug getrunken hat."""
+    """Raised when CandyEater has not drunk enough water before eating chocolate"""
 
     def __init__(self, min_water):
         self.min_water = min_water
-        self.message = f"Zu wenig Wasser getrunken! CandyEater muss zum Essen mindesten {min_water} Wasser haben!"
+        self.message = f"Not enough water! CandyEater needs at least {min_water} water to eat chocolate!"
         super().__init__(self.message)
 
 
 class CandyEater:
+    MAX_CHOCOLATE = 5
+    MIN_WATER = 2
+
     def __init__(self):
-        self.MAX_CHOCOLATE = 5
-        self.MIN_WATER = 2
         self.chocolate_bars_eaten = 0
         self.water_sipped = 4
 
@@ -50,21 +52,18 @@ class CandyEater:
         else:
             self.chocolate_bars_eaten += 1
             self.water_sipped -= 1
-            return "Esse Schokolade."
-
+            return "Eating chocolate."
 
 bob = CandyEater()
-for _ in range(6):
-    bob.eat_chocolate_bar()
-
 for i in range(7):
     try:
         print(f"{i} {bob.eat_chocolate_bar()}")
     except TooMuchChocolateException as chocolate:
-        print(f"{i} Verdaue Schokolade, da ich den Maximalwert von: {chocolate.bars_eaten}.")
+        print(f"{i} Digesting chocolate, as I have reached the maximum limit of: {chocolate.bars_eaten}.")
     except NotEnoughWaterException as water:
-        print(f"{i} Ich trinke erstmal Wasser bevor ich noch mehr Schokolade esse.")
+        print(f"{i} Drinking water before eating more chocolate.")
         bob.water_sipped = 5
+
     # else:
     #     print(f"{i} Ich werde nur dann ausgeführt, wenn keinen Exception aufgerufen wurde.")
     # finally:

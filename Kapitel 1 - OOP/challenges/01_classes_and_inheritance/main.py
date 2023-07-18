@@ -1,36 +1,74 @@
-# TEIL I: Klassen
-# Schreibe eine Klasse "Trainee", welche folgende Methoden hat:
-# > __init__
-#    > Lege mit Hilfe von self die die Attribute course: str, name: str, skill_level: int an
-# > who_am_i
-#    > Gebe einen String aus, welcher name, course und skill_level beinhaltet
-# > add_skill_points(quantity: int)
-#    > Füge dem skill_level quantity skill-Punkte hinzu
-# > __del__
-#    > Gebe mit einem print-Aufruf aus, dass das Objekt zerstört wurde.
-#
-# Erstelle anschließend in main.py zwei Instanzen von Trainee Namens alice und bob mit den Werten:
-# alice: name="Alice", course="Python Aufbaukurs", skill_level=75
-# bob: name="Bob", course="Data Science und Machine Learning mit Python"
-# Rufe jeweils who_am_i auf
-# Rufe jeweils add_skill_points(12) auf
-# Rufe erneut who_am_i auf
-#
-# TEIL II: Vererbung
-# Schreibe eine Klasse Trainer, die von Trainee erbt.
-# Auch Trainer initialisiert die Parameter name, course und skill_points.
-# Reiche dies an den Konstruktor von Trainee weiter.
-# Erstelle eine Methode in Trainer namens teach:
-# > teach fügt zuerst dem Trainer 3 Skillpunkte hinzu.
-#   >>> Falls der Trainer den Kurs in Java hält, wird mit print() "Ich möchte das nicht." ausgegeben.
-#       Andernfalls wird "Willkommen zu 'Kursname'" ausgegeben
+class Trainee:
+    """
+    A class representing a trainee.
 
-from trainee import Trainee
-from trainer import Trainer
+    Attributes:
+    -----------
+    course : str
+        The course the trainee is enrolled in.
+    name : str
+        The name of the trainee.
+    skill_level : int
+        The skill level of the trainee.
+
+    Methods:
+    --------
+    __init__(self, name: str, course: str, skill_level: int = 0) -> None
+        Initializes the Trainee object with the given name, course and skill level.
+    who_am_i(self) -> str
+        Returns a string containing the name, course and skill level of the trainee.
+    add_skill_points(self, quantity: int) -> None
+        Adds the given quantity of skill points to the trainee's skill level.
+    __del__(self) -> None
+        Prints a message indicating that the object has been destroyed.
+    """
+    def __init__(self, name: str, course: str, skill_level: int = 0) -> None:
+        self.course = course
+        self.name = name
+        self.skill_level = skill_level
+
+    def who_am_i(self) -> str:
+        return f"My name is {self.name}, I am enrolled in {self.course} and my skill level is {self.skill_level}."
+
+    def add_skill_points(self, quantity: int) -> None:
+        self.skill_level += quantity
+
+    def __del__(self) -> None:
+        print(f"The Trainee object {self.name} has been destroyed.")
 
 
-def test_trainees():
-    alice = Trainee(name="Alice", course="Python Aufbaukurs", skill_points=12)
+class Trainer(Trainee):
+    """
+    A class representing a trainer.
+
+    Attributes:
+    -----------
+    course : str
+        The course the trainer is teaching.
+    name : str
+        The name of the trainer.
+    skill_level : int
+        The skill level of the trainer.
+
+    Methods:
+    --------
+    teach(self) -> None
+        Adds 3 skill points to the trainer's skill level and prints a message indicating the course name.
+        If the trainer is teaching a Java course, prints "I don't want to do this."
+    """
+    def teach(self) -> None:
+        self.skill_level += 3
+        if self.course == "Java":
+            print("I don't want to do this.")
+        else:
+            print(f"Welcome to {self.course}!")
+
+
+def test_trainees() -> None:
+    """
+    Tests the Trainee class by creating two Trainee objects, adding skill points to them and printing their information.
+    """
+    alice = Trainee(name="Alice", course="Python Aufbaukurs", skill_level=75)
     bob = Trainee(name="Bob", course="Data Science und Machine Learning mit Python")
     print(alice.who_am_i())
     print(bob.who_am_i())
@@ -40,12 +78,16 @@ def test_trainees():
     print(bob.who_am_i())
 
 
-def test_trainer():
-    alex = Trainer(name="Alex", course="Java", skill_points=44)
+def test_trainer() -> None:
+    """
+    Tests the Trainer class by creating a Trainer object, adding skill points to it, calling the teach method and printing its information.
+    """
+    alex = Trainer(name="Alex", course="Java", skill_level=44)
     print(alex.who_am_i())
     alex.teach()
     print(alex.who_am_i())
 
 
-test_trainees()
-test_trainer()
+if __name__ == "__main__":
+    test_trainees()
+    test_trainer()

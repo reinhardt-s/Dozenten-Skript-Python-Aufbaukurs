@@ -1,29 +1,38 @@
 class Trainee:
     """
-    Diese Klasse repräsentiert eine Schüler*in mit Namen, Kurs und Fähigkeiten
+    This class represents a trainee with a name, course, and skill points.
     """
 
-    def __init__(self, name: str, course: str, skill_points=14):
-        print(f"Initialisiere Trainee {name}")
+    def __init__(self, name: str, course: str, skill_points: int = 14) -> None:
+        """
+        Initializes a Trainee object with a name, course, and skill points.
+        :param name: The name of the trainee.
+        :param course: The course of the trainee.
+        :param skill_points: The skill points of the trainee.
+        """
+        print(f"Initializing Trainee {name}")
         self.name = name
         self.course = course
         self.skill_points = skill_points
 
-    def who_am_i(self) -> str:
+    def __str__(self) -> str:
         """
-        Beschreibt den Trainee in einem String
-        :return: Gibt einen String aus, welcher name, course und skill_level beinhaltet
+        Returns a string representation of the Trainee object.
+        :return: A string representation of the Trainee object.
         """
-        return f'Name: {self.name}\nKurs: {self.course}\nSkill: {str(self.skill_points)}'
+        return f'Name: {self.name}\nCourse: {self.course}\nSkill Points: {self.skill_points}'
 
     def add_skill_points(self, quantity: int) -> int:
         """
-        Erhöht den Skill des Trainees um quantity
-        :param quantity: Anzahl der hinzuzufügenden Skillpunkte
-        :return: Gibt den neuen Wert an Skillpunkten zurück
+        Increases the skill points of the trainee by the given quantity.
+        :param quantity: The quantity of skill points to add.
+        :return: The new skill points value.
         """
         self.skill_points += quantity
         return self.skill_points
 
-    def __del__(self):
-        print(f"Trainee-Objekt {self.name} wird zerstört")
+    def __del__(self) -> None:
+        """
+        Destroys the Trainee object.
+        """
+        print(f"Destroying Trainee object {self.name}")

@@ -3,22 +3,18 @@ from random import randint
 
 
 class CoffeeMaker(SelfCleaningInterface):
-    """
-    Beste und einzige Kaffemaschine in unserem Angebot.
-    """
+    """A class representing a coffee maker that implements the SelfCleaningInterface."""
 
     def __init__(self):
-        print("Kaffeemaschine ist betriebsbereit")
+        """Initialize the CoffeeMaker object."""
+        print("Coffee maker is ready for use.")
 
     def start_cleaning(self):
-        print("Drücke heißes Wasser durch alle Schläuche.")
+        """Start the cleaning process."""
+        print("Running hot water through all hoses.")
         print("PTPFFFFF.")
-        print("Vorgang abgeschlossen.")
+        print("Cleaning process complete.")
 
     def check_if_dirty(self):
+        """Check if the coffee maker is dirty."""
         return randint(0, 1)
-
-# class CoffeeMaker(SelfCleaningInterface):
-#
-#     def __init__(self):
-#         print("Kaffeemaschine ist betriebsbereit")

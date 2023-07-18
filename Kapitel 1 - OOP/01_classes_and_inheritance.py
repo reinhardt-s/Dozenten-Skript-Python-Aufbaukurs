@@ -1,46 +1,41 @@
 class Vehicle:
     """
-    Die Vehicle-Klasse liefert die Grundfunktionalitäten, welche allen Fahrzeugen zur Verfügung stehen.
+    The Vehicle class provides the basic functionalities that all vehicles have.
     """
 
-    # Auch mit weiteren Parametern, inkl default Werten
     def __init__(self, speed="25 km/h"):
         self.speed = speed
-        print("Fahrzeug initialisiert")
 
     def drive(self):
         """
-        Fährt das Fahrzeug.
+        Drives the vehicle.
         """
-        print(f"Dieses Fahrzeug fährt nun: {self.speed}")
+        print(f"This vehicle is now driving at: {self.speed}")
 
     def turn(self, direction: str):
         """
-        Lenkt das Fahrzeug in die angegebene Richtung
-        :param direction: Die Richtung in welche das Fahrzeug sich bewegen soll
+        Turns the vehicle in the specified direction.
+        :param direction: The direction in which the vehicle should move.
         """
-
-        print(f"Lenke nach {direction}")
+        print(f"Turning {direction}")
 
     def __del__(self):
-        print("Vehicle-Objekt wird gelöscht")
+        print("Vehicle object is being deleted")
 
 
 class Car(Vehicle):
     """
-    Car definiert vollumfänglich die Funktionen eines Autos.
+    Car defines all the functions of a car.
     """
 
-    def __init__(self, speed="150f km/h"):
-        super().__init__()
+    def __init__(self, speed="150 km/h"):
+        super().__init__(speed=speed)
         self.doors = 5
-        self.speed = speed
-        print("Auto initialisiert")
+        print("Car initialized")
 
 
 bmw = Car()
 
-print(f"Türen: {bmw.doors}")
+print(f"Doors: {bmw.doors}")
 bmw.drive()
-bmw.turn("links")
-bmw.turn(2)  # got int instead
+bmw.turn("left")

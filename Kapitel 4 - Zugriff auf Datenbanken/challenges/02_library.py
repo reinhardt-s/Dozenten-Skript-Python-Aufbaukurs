@@ -3,8 +3,8 @@
 # "Authors" soll eine Tabelle mit den Feldern "id" und "name" sein.
 # Fügen Sie einige Bücher zur Tabelle hinzu und führen Sie Abfragen durch, um die Bücherliste zu erhalten.
 
-from sqlalchemy import ForeignKey, Column, Integer, String, create_engine, select
-from sqlalchemy.orm import relationship, declarative_base, Session
+from sqlalchemy import Column, ForeignKey, Integer, String, create_engine, select
+from sqlalchemy.orm import Session, declarative_base, relationship
 
 Base = declarative_base()
 engine = create_engine('sqlite:///library.db', echo=False)
@@ -36,14 +36,11 @@ author2 = Author(name='J. K. Rowling')
 book1 = Book(title='The Shining', author=author1)
 book2 = Book(title='Harry Potter', author=author2)
 
-session.add(book1)
-session.add(book2)
-session.add(author1)
-session.add(author2)
+session.add_all([book1, book2, author1, author2])
 session.commit()
 
 # Query data
 books = select(Book)
-result_set = session.scalars(books)
-for book in result_set:
-    print(book.title, book.author.name)
+result_set = session.execute(books)
+for book in result_set.scalars():
+    print(f"{book.title} by {book.author.name}")

@@ -6,17 +6,40 @@
 #
 # Implementiere in der while-Schleife den Funktionsaufruf und erhöhe die Ladung (phone_charge)
 
+from typing import Callable
+
 hour = 22
 phone_charge = 12
 
-def get_best_charge_method(current_charge):
-    def fast_charge(charge: int):
+
+def get_best_charge_method(current_charge: int) -> Callable[[int], int]:
+    """
+    Returns the best charging method based on the current charge and the hour of the day.
+    If the hour is between 6 and 22 or the current charge is above 89%, it returns the eco_charge method.
+    Otherwise, it returns the fast_charge method.
+
+    :param current_charge: The current charge of the phone battery.
+    :return: The best charging method as a callable function.
+    """
+    def fast_charge(charge: int) -> int:
+        """
+        Increases the charge by 4.
+
+        :param charge: The current charge of the phone battery.
+        :return: The charge increased by 4.
+        """
         return charge + 4
 
-    def eco_charge(charge: int):
+    def eco_charge(charge: int) -> int:
+        """
+        Increases the charge by 1.
+
+        :param charge: The current charge of the phone battery.
+        :return: The charge increased by 1.
+        """
         return charge + 1
 
-    if (6 < hour < 22) or (current_charge > 89):
+    if 6 < hour < 22 or current_charge > 89:
         return eco_charge
     else:
         return fast_charge

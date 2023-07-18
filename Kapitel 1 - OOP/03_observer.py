@@ -1,136 +1,131 @@
-
-from abc import ABC
+from typing import List
 
 
 class Observer:
     """
-    Die Observerklasse wird jener Klasse vererbt, welche andere Klassen über die Änderung eines Zustandes
-    informieren soll.
+    The Observer class is inherited by the class that should inform other classes about a state change.
     """
 
     def __init__(self):
-        self._observer = []
+        self._observers: List = []
 
     def notify(self, modifier=None):
         """
-        Wird aufgerufen, um alle Subscriber über eine Zustandsänderung zu informieren.
+        Notifies all subscribers about a state change.
         """
-        for observer in self._observer:
+        for observer in self._observers:
             if modifier != observer:
                 observer.update(self)
 
     def attach(self, observer):
         """
-        Hiermit werden die Subscriber hinzugefügt.
+        Adds subscribers.
 
-        :param observer: Das hinzuzufügende Objekt
+        :param observer: The object to be added
         """
-        if observer not in self._observer:
-            print(f"Neuer Subscriber: {observer.name}")
-            self._observer.append(observer)
+        if observer not in self._observers:
+            print(f"New subscriber: {observer.name}")
+            self._observers.append(observer)
 
     def detach(self, observer):
         """
-        Wird benutzt, um Subscriber wieder zu entfernen.
+        Removes subscribers.
 
-        :param observer: Das wieder zu entfernede Objekt.
+        :param observer: The object to be removed.
         """
         try:
-            self._observer.remove(observer)
+            self._observers.remove(observer)
         except ValueError:
-            # Falls es nicht möglich ist, den Subscriber zu entfernen, informieren wir den Aufrufer mit einer
-            # Exception darüber.
-            print(f"Observer konnte nicht {observer} konnte nicht entfernt werden.")
+            print(f"Observer {observer} could not be removed.")
 
 
 class BreakModule:
     """
-    Ein Modul, welches alle Fahrzeuge haben sollten. Es bremst.
+    A module that all vehicles should have. It brakes.
     """
 
     def __init__(self):
-        self.name = "Bremsmodul"
+        self.name = "Brake Module"
 
     def update(self, caller):
         """
-        Implementierung der update Funktionalität. Sie wird aufgerufen, so ein beobachteter Zustand sich ändert.
+        Implementation of the update functionality. It is called when an observed state changes.
 
-        :param caller: Aufrufendes Objekt.
+        :param caller: Calling object.
         """
-        print(f"{self.name}: {caller} meldet Aufprall!")
-        print(f"Führe Vollbremsung durch")
+        print(f"{self.name}: {caller} reports collision!")
+        print(f"Perform full brake")
 
 
 class LightModule:
     """
-    Dieses Modul deckt alles üblichen Lichtszenarien eines Fahrzeugs ab.
+    This module covers all common lighting scenarios of a vehicle.
     """
 
     def __init__(self):
-        self.name = "Lichtmodul"
+        self.name = "Light Module"
 
     def update(self, caller):
         """
-        Implementierung der update Funktionalität. Sie wird aufgerufen, so ein beobachteter Zustand sich ändert.
+        Implementation of the update functionality. It is called when an observed state changes.
 
-        :param caller: Aufrufendes Objekt.
+        :param caller: Calling object.
         """
-        print(f"{self.name}: {caller} meldet Aufprall!")
-        print(f"Schalte Warnblicklicht an")
+        print(f"{self.name}: {caller} reports collision!")
+        print(f"Turn on hazard lights")
 
 
 ###########################################################################
 
-class AccelerationInterface(ABC):
+class AccelerationInterface:
     def accelerate(self) -> str:
         """
-        Beschreibe wie das Fahrzeug beschleunigt
+        Describes how the vehicle accelerates.
 
-        :return: Gibt als String aus, wie das Fahrzeug beschleunigt.
+        :return: Returns a string describing how the vehicle accelerates.
         """
         pass
 
 
-# Die Fahrzeugklasse erbt die Observerklasse
 class Vehicle(Observer):
     """
-    Die Vehicle-Klasse liefert die Grundfunktionalitäten, welche allen Fahrzeugen zur Verfügung stehen.
+    The Vehicle class provides the basic functionalities that are available to all vehicles.
     """
 
     def __init__(self):
         super().__init__()
         self.speed = "25 km/h"
-        print("Fahrzeug initialisiert")
+        print("Vehicle initialized")
 
     def turn(self, direction: str):
         """
-        Lenkt das Fahrzeug in die angegebene Richtung.
+        Steers the vehicle in the specified direction.
 
-        :param direction: Gibt die Richtung an, in die gelenkt werden soll.
+        :param direction: Specifies the direction to steer.
         """
-        print(f"Lenke nach {direction}")
+        print(f"Steering towards {direction}")
 
 
 class Car(Vehicle, AccelerationInterface):
-    """Car definiert vollumfänglich die Funktionen eines Autos."""
+    """Car fully defines the functions of a car."""
 
     def __init__(self):
         super().__init__()
         self.doors = 5
-        # Erstelle Auto-Module
+        # Create car modules
         self.light_module = LightModule()
         self.break_module = BreakModule()
-        # Füge die Module als Observer hinzu
+        # Add the modules as observers
         self.attach(self.break_module)
         self.attach(self.light_module)
 
-        print("Auto initialisiert")
+        print("Car initialized")
 
     def accelerate(self) -> str:
-        return "Trete auf Gaspedal"
+        return "Step on gas pedal"
 
 
 bmw = Car()
 
-# Baum springt auf die Straße. Das Auto reagiert.
+# A tree jumps onto the road. The car reacts.
 bmw.notify()

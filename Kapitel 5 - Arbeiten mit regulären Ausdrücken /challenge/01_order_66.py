@@ -5,13 +5,6 @@
 # Gebe die Bestellungen auf der Konsole aus.
 
 import re
-from pydantic import BaseModel
-
-orders_from_string = [
-    'Han Solo, Smuggler, 1x Hyperdrive Generator, 3x Droid Repair Kit, 2x Beskar Steel',
-    'Luke Skywalker, Jedi, 1x Lightsaber, 4x Droid Repair Kit, 2x Holocron'
-]
-
 from typing import List
 from pydantic import BaseModel
 
@@ -30,11 +23,16 @@ class Order(BaseModel):
     items: List[Item]
 
     def __repr__(self):
-        return f"{self.name} ({self.profession}) ordered: {', '.join([str(item) for item in self.items])}"
+        return f"{self.name} ({self.profession}) ordered: {', '.join(map(str, self.items))}"
 
 
 # Regular expression pattern
 pattern = r'(\d+)x ([\w\s]+)'
+
+orders_from_string = [
+    'Han Solo, Smuggler, 1x Hyperdrive Generator, 3x Droid Repair Kit, 2x Beskar Steel',
+    'Luke Skywalker, Jedi, 1x Lightsaber, 4x Droid Repair Kit, 2x Holocron'
+]
 
 orders = []
 
@@ -43,15 +41,10 @@ for order in orders_from_string:
     matches = re.findall(pattern, order)
 
     # Extract name and profession
-    splitted = re.split(r', ', order)
-    name = splitted[0]
-    profession = splitted[1]
+    name, profession = order.split(", ")[0:2]
 
     # Create purchase
-    new_order = Order(name=name, profession=profession, items=[])
-
-    for match in matches:
-        new_order.items.append(Item(item=match[1], quantity=int(match[0])))
+    new_order = Order(name=name, profession=profession, items=[Item(item=match[1], quantity=int(match[0])) for match in matches])
     orders.append(new_order)
 
 

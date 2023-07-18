@@ -5,8 +5,6 @@ data_frame = pd.read_excel('./Material-Liste.xlsx', sheet_name="Materialliste-We
 
 material_dict = dict(zip(data_frame[0], data_frame[1]))
 
-cost = 0
-for key in material_dict.keys():
-    cost += material_dict[key]
+cost = sum(material_dict.values())
 cost = "{:.2f}".format(cost)
 print(f"Der Weihnachtsbaum kostet {cost} EUR")

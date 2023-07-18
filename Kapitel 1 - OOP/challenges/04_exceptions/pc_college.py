@@ -2,7 +2,7 @@ from no_such_course_exception import NoSuchCourseException
 
 class PcCollege:
     """
-    Diese Klasse beinhaltet unter anderem die Kurse die zurzeit angeboten werden.
+    This class contains the courses currently offered.
     """
 
     def __init__(self):
@@ -15,10 +15,10 @@ class PcCollege:
 
     def book_course(self, course_name: str) -> bool:
         """
-        Fügt einem Kurs einen Teilnehmer hinzu, sofern der Kurs gefunden wird.
-        Wird andernfalls eine Exception
-        :param course_name:
-        :return:
+        Adds a participant to a course if the course is found.
+        Otherwise, raises a NoSuchCourseException.
+        :param course_name: str, name of the course to book
+        :return: bool, True if the course is found and the participant is added, False otherwise
         """
         if course_name not in self.courses:
             raise NoSuchCourseException(course_name=course_name)

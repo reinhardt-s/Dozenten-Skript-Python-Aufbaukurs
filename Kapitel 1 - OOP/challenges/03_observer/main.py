@@ -8,6 +8,9 @@ from observer import Observer
 
 
 class ExtinguishingSystem:
+    """
+    This class represents the extinguishing system which is an observer of the FireAlertSystem.
+    """
     def __init__(self):
         self.name = "Dam Break 22"
         self.water_supply = 2500
@@ -15,56 +18,68 @@ class ExtinguishingSystem:
 
     def show_water_supply(self):
         """
-        Gibt den aktuellen Restwasserstand aus.
+        Prints the current remaining water supply.
         """
-        print(f'Restlöschwasserstand: {self.water_supply} Liter')
+        print(f'Remaining water supply: {self.water_supply} liters')
 
     def set_valves_open(self, state: bool):
         """
-        Öffnet oder schließt die Ventile zum Löschwasser
-        :param state: True = offen, False = geschlossen
+        Opens or closes the valves to the extinguishing water.
+        :param state: True = open, False = closed
         """
         self.valves_open_state = state
-        state = 'offen' if state is True else 'geschlossen'
-        print(f'Die Ventile sind nun {state}.')
+        state = 'open' if state else 'closed'
+        print(f'The valves are now {state}.')
 
     def update(self, caller):
-        print(f'{self.name}: {caller.name} meldet Brandfall!')
+        """
+        This method is called by the FireAlertSystem when a fire is detected.
+        It opens the valves and shows the remaining water supply.
+        """
+        print(f'{self.name}: {caller.name} reports fire!')
         self.set_valves_open(True)
         self.show_water_supply()
 
 
 class EmergencyCall:
     """
-    Setzt im Brandfall einen Notruf bei der Leitstelle ab.
+    This class represents the emergency call system which is an observer of the FireAlertSystem.
     """
-
     def __init__(self):
         self.name = "E-Call 1433"
 
     def make_call(self):
-        print(f'Setze Notruf ab.')
+        """
+        Makes an emergency call.
+        """
+        print(f'Making emergency call.')
         print(f'...')
-        print(f'Notruf abgesetzt.')
+        print(f'Emergency call made.')
 
     def update(self, caller):
-        print(f'{self.name}: {caller.name} meldet Brandfall!')
+        """
+        This method is called by the FireAlertSystem when a fire is detected.
+        It makes an emergency call.
+        """
+        print(f'{self.name}: {caller.name} reports fire!')
         self.make_call()
 
 
 class FireAlertSystem(Observer):
     """
-    Diese Brandmeldeanlage dient dazu, im Brandfall, alle angeschlossenen Systeme zu informieren,
-    sodass diese entsprechend handeln können.
+    This class represents the FireAlertSystem which is the subject of the observers.
     """
-
     def __init__(self):
         self.name = "BAM!"
-        super(FireAlertSystem, self).__init__()
+        super().__init__()
         self.attach(ExtinguishingSystem())
         self.attach(EmergencyCall())
 
     def fire_detected(self):
+        """
+        This method is called when a fire is detected.
+        It notifies all the observers.
+        """
         self.notify()
 
 

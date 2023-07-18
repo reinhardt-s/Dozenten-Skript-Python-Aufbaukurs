@@ -1,10 +1,9 @@
 import re
-
 import requests
 
 mail = "Hallo, bitte senden Sie Ihre Bewerbung an bommelskirchen@digitialisierung.de. Wir freuen uns, von Ihnen zu hören."
 
-matches = re.findall('([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)', mail)
+matches = re.findall(r'\b[\w.-]+?@\w+?\.\w{2,4}\b', mail)
 
 for entry in matches:
     print(entry)

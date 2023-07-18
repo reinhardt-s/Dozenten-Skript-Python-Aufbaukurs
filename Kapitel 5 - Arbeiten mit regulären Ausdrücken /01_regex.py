@@ -30,57 +30,124 @@
 
 import re
 
-text = "Contact us at contact@mywebsite.com or sales@mywebsite.com"
-emails = re.findall(r'[\w\.-]+@[\w\.-]+', text)
+def find_emails(text):
+    """
+    Find all email addresses in a given text.
 
-for email in emails:
-    print(email)
+    Args:
+    text (str): The text to search for email addresses.
+
+    Returns:
+    list: A list of email addresses found in the text.
+    """
+    return re.findall(r'[\w\.-]+@[\w\.-]+', text)
+
+def find_phone_numbers(text):
+    """
+    Find all phone numbers in a given text.
+
+    Args:
+    text (str): The text to search for phone numbers.
+
+    Returns:
+    list: A list of phone numbers found in the text.
+    """
+    return re.findall(r'\d{3}-\d{3}-\d{4}', text)
+
+def find_dates(text):
+    """
+    Find all dates in a given text.
+
+    Args:
+    text (str): The text to search for dates.
+
+    Returns:
+    list: A list of dates found in the text.
+    """
+    return re.findall(r'\d{2}-\d{2}-\d{4}', text)
+
+def redact_website(text):
+    """
+    Replace all website URLs in a given text with [redacted].
+
+    Args:
+    text (str): The text to search for website URLs.
+
+    Returns:
+    str: The text with website URLs replaced with [redacted].
+    """
+    return re.sub(r'www\.[\w\.-]+', '[redacted]', text)
+
+def find_numbers_at_start(text):
+    """
+    Find the first occurrence of a number at the start of a given text.
+
+    Args:
+    text (str): The text to search for a number at the start.
+
+    Returns:
+    str: The first number found at the start of the text, or None if no number is found.
+    """
+    match = re.match(r"\d+", text)
+    if match:
+        return match.group()
+    else:
+        return None
+
+def find_number_in_text(text):
+    """
+    Find the first occurrence of a number in a given text.
+
+    Args:
+    text (str): The text to search for a number.
+
+    Returns:
+    str: The first number found in the text, or None if no number is found.
+    """
+    match = re.search(r"\d+", text)
+    if match:
+        return match.group()
+    else:
+        return None
+
+def split_text_by_numbers(text):
+    """
+    Split a given text by numbers.
+
+    Args:
+    text (str): The text to split.
+
+    Returns:
+    list: A list of strings split by numbers.
+    """
+    return re.split('\d{4}:', text)
+
+# Example usage
+text = "Contact us at contact@mywebsite.com or sales@mywebsite.com"
+emails = find_emails(text)
+print(emails)
 
 text = "Call us at 123-456-7890 or 098-765-4321"
-phone_numbers = re.findall(r'\d{3}-\d{3}-\d{4}', text)
-
-for number in phone_numbers:
-    print(number)
+phone_numbers = find_phone_numbers(text)
+print(phone_numbers)
 
 text = "Important dates are 05-09-2022 and 12-25-2023"
-dates = re.findall(r'\d{2}-\d{2}-\d{4}', text)
-
-for date in dates:
-    print(date)
+dates = find_dates(text)
+print(dates)
 
 text = "Visit our website! www.mywebsite.com, best site ever!"
-new_text = re.sub(r'www\.[\w\.-]+', '[redacted]', text)
+new_text = redact_website(text)
 print(new_text)
 
-pattern = r"\d+"  # Das Muster passt auf eine oder mehrere Ziffern.
-string = "12345 Hallo Welt!"
+text = "12345 Hallo Welt!"
+number_at_start = find_numbers_at_start(text)
+print(number_at_start)
 
-match = re.match(pattern, string)
-
-# Match findet nur Übereinstimmungen am Anfang des Strings.
-if match:
-    print("Das Muster wurde gefunden!")
-    print("Gefundene Übereinstimmung: ", match.group())  # Zeigt den Teil des Strings, der auf das Muster passt.
-else:
-    print("Das Muster wurde nicht gefunden.")
-
-import re
-
-pattern = r"\d+"  # Das Muster passt auf eine oder mehrere Ziffern.
-string = "Hallo Welt! 12345 ist die Zahl."
-
-match = re.search(pattern, string)
-
-if match:
-    print("Das Muster wurde gefunden!")
-    print("Gefundene Übereinstimmung: ", match.group())  # Zeigt den Teil des Strings, der auf das Muster passt.
-else:
-    print("Das Muster wurde nicht gefunden.")
+text = "Hallo Welt! 12345 ist die Zahl."
+number_in_text = find_number_in_text(text)
+print(number_in_text)
 
 text = "1435:Lagemeldung bei eintreffen am Einsatzort" \
        "1444:Einsatzstelle an Polizei übergeben1450:Einsatzstelle verlassen"
-# Teilen Sie den String jedes Mal, wenn "Welt" erscheint.
-split_text = re.split('\d{4}:', text)
-
+split_text = split_text_by_numbers(text)
 print(split_text)
-

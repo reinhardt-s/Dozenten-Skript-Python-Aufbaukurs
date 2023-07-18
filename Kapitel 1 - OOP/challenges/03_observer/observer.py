@@ -1,41 +1,39 @@
 class Observer:
     """
-    Die Observerklasse wird jener Klasse vererbt, welche andere Klassen über die Änderung eines Zustandes
-    informieren soll.
+    The Observer class is inherited by the class that should inform other classes about a change in state.
     """
 
     def __init__(self):
-        self._observer = []
+        self._observers = []
 
     def notify(self, modifier=None):
         """
-        Wird aufgerufen, um alle Subscriber über eine Zustandsänderung zu informieren.
+        Notifies all subscribers about a change in state.
 
-        :param modifier: Gibt an, wer notify aufgerufen hat.
+        :param modifier: Indicates who called notify.
         """
-        for observer in self._observer:
+        for observer in self._observers:
             if modifier != observer:
                 observer.update(self)
 
     def attach(self, observer):
         """
-        Hiermit werden die Subscriber hinzugefügt.
+        Adds subscribers.
 
-        :param observer: Das hinzuzufügende Objekt
+        :param observer: The object to be added.
         """
-        if observer not in self._observer:
-            print(f"Neuer Subscriber: {observer.name}")
-            self._observer.append(observer)
+        if observer not in self._observers:
+            print(f"New subscriber: {observer.name}")
+            self._observers.append(observer)
 
     def detach(self, observer):
         """
-        Wird benutzt, um Subscriber wieder zu entfernen.
+        Removes subscribers.
 
-        :param observer: Das wieder zu entfernede Objekt.
+        :param observer: The object to be removed.
         """
         try:
-            self._observer.remove(observer)
+            self._observers.remove(observer)
         except ValueError:
-            # Falls es nicht möglich ist, den Subscriber zu entfernen, informieren wir den Aufrufer mit einer
-            # Exception darüber.
-            print(f"Observer konnte nicht {observer} konnte nicht entfernt werden.")
+            # If it is not possible to remove the subscriber, we inform the caller with an exception.
+            print(f"Observer {observer} could not be removed.")

@@ -18,15 +18,23 @@
 # Lege in main.py je einen Dishwasher als auch einen CoffeeMaker an.
 # Setze den runcycles_count für den Dishwasher auf 15.
 # Prüfe beide Geräte, ob sie gereinigt werden müssen und starte ggf. den Reinigungsprozess.
+
 from dishwasher import Dishwasher
 from coffee_maker import CoffeeMaker
 
+# Create instances of Dishwasher and CoffeeMaker
 dishwasher = Dishwasher()
-dishwasher.run_cycles = 15
 coffee_maker = CoffeeMaker()
+
+# Set the run_cycles attribute of the Dishwasher instance to 15
+dishwasher.run_cycles = 15
+
+# Create a list of widgets
 widgets = [dishwasher, coffee_maker]
 
+# Iterate over the widgets list
 for widget in widgets:
+    # Check if the widget is dirty
     if widget.check_if_dirty():
+        # If the widget is dirty, start the cleaning process
         widget.start_cleaning()
-

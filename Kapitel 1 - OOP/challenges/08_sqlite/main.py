@@ -11,26 +11,29 @@
 # präsentiere in einem print-Statement, die Längen- und Breitengrade des Treffers
 import sqlite3
 
+import sqlite3
+
 DB_FILE = "./weather_data.db"
 
 
 def request_db(statement, values=()):
+    """
+    Executes a statement on the database and returns the result as a list of dictionaries.
+    :param statement: SQL statement to execute
+    :param values: tuple of values to be inserted into the statement
+    :return: list of dictionaries representing the rows returned by the statement
+    """
     with sqlite3.connect(DB_FILE) as con:
-        # Gebe sqlite3.Row anstelle von tuple zurück
         con.row_factory = sqlite3.Row
-        # Erzeuge einen Cursor, der auf der Datenbank operieren kann
         cursor = con.cursor()
         result = cursor.execute(statement, values)
-        return result.fetchall()
+        return [dict(row) for row in result.fetchall()]
 
 
 communities = [row['community'] for row in request_db("SELECT community FROM communities")]
 user_input = input("Bitte Stadt oder Gemeindenamen eingeben.\n")
 
-candidates = []
-for community in communities:
-    if user_input.lower() in community.lower():
-        candidates.append(community)
+candidates = [community for community in communities if user_input.lower() in community.lower()]
 
 for pos, candidate in enumerate(candidates):
     print(f'{pos}:\t{candidate}')
